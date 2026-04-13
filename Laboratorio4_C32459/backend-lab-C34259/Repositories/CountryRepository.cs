@@ -19,6 +19,23 @@ namespace backend_lab.Handlers
                 builder.Configuration.GetConnectionString("CountryContext");
             }
 
+            public bool CreateCountry(CountryModel country)
+            {
+                using var connection = new
+               SqlConnection(_connectionString);
+                var query = @"INSERT INTO [dbo].[Country]
+                ([Name],[Language],[Continent])
+                VALUES(@Name, @Language, @Continent)";
+                var affectedRows = connection.Execute(query, new
+                {
+                    Name = country.Name,
+                    Language = country.Language,
+                    Continent = country.Continent
+                });
+                return affectedRows >= 1;
+            }
+
+
             [Obsolete]
             public List<CountryModel> GetCountries()
             {
